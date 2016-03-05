@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8" />
+        <title><%= pseudo %> on <%= channel %></title>
+        
+        <link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.4/themes/smoothness/jquery-ui.css">
+    	<link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" rel="stylesheet" integrity="sha256-7s5uDGW3AHqw6xtJmNNtr+OBRJUlgkNJEo78P4b0yRw= sha512-nNo+yCHEyn0smMxSswnf/OnX6/KwJuZTlNZBjauKhTK0c+zT+q5JOCx0UFhXQ6rJR9jg6Es8gPuD2uZcYDLqSw==" crossorigin="anonymous">
+    </head>
+ 
+    <body>
+		<div class="container">
+			<div class="page-header" style="margin-top:10px;">
+				<center>
+					<img class="img-circle" src="images/hurleur.jpg" width="60" height="60">
+					<h3 style="color:#444;">
+						 Hello <span style="color:#4B8F52;"><%= pseudo %></span>, welcome to the <span style="color:#4B8F52;"><%= channel %></span> channel !
+					</h3>
+				</center>
+			</div>
+			<div class="raw">	
+				<div class="col-md-8 col-sm-9 col-xs-12">
+					<div class="well" id="output" style="font-size:14px;height:320px;overflow: auto;border-color:#999;"></div>
+					<form action="javascript:sendMessage();">
+						<div class="input-group">
+							<input id="msg" class="form-control" placeholder="talk to misguided ..." size="45" autocomplete="off">
+							<span class="input-group-btn">
+								<button class="btn btn-primary" type="submit">
+									&nbsp;&nbsp;&nbsp;Send&nbsp;&nbsp;&nbsp;	
+							</span>
+						</div>
+					</form>
+				</div>
+				<div class="col-md-4 col-sm-3 col-xs-4">
+					<div class="panel panel-default" style="border-color:#999;height:320px;">
+						<div class="panel-heading" style="padding-bottom:15px;overflow: auto;border-color:#999;">
+							<b>Missguided</b> &middot; (<span id="numberUsers">1</span> sur <%= nbrMaxUser %>)
+						</div>
+						<div id="missguided" class="panel-body"></div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<br><br>
+		<div class="container">
+			<p class="text-center" style="color:#585858;">Chat example demonstration ... Don't use in prod ;-)</p>
+		</div>
+		
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
+		<script src="/socket.io/socket.io.js"></script>
+		<script>
+			/**** Initialisation websocket ****/
+			
+			var socket= io.connect('http://192.168.1.50:8080', {
+				query:'pseudo=<%= pseudo %>&channel=<%= channel %>'
+			});
+			
+			$('#msg').focus(); //Focus sur le champs de saisie des messages.
+			
+			
+			/**** Gestion des évènements ****/
+			
+			//Réception des messages
+			socket.on('message', function(msg){
+				$("#output").append('<p><b>'+msg['pseudo']+'</b> : '+msg['text']+'</p>');
+				$("#output").scrollTop($("#output")[0].scrollHeight);
+			});
+			
+			//Réception de la liste des utilisateurs connectés au channel
+			socket.on('list', function(users){
+				var numbUsers= users.length;
+				
+				if (users.length > 0){
+					for (var i=0; i<users.length; i++){
+						$("#missguided").append('<p id="'+users[i]+'">'+users[i]+'</p>');
+					}
+				}
+				$('#numberUsers').text(numbUsers);
+			});
+		
+			//Informations diverses (deconnexion, connexion, etc ...)
+			socket.on('infos', function(msg){
+				$("#output").append('<p><i style="color:#585858; font-size:12px;"><b>'+msg['pseudo']+'</b> '+msg['text']+'</i></p>');
+				$("#output").scrollTop($("#output")[0].scrollHeight);
+				
+				var newNumbUsers=Number($('#numberUsers').text());
+				
+				if (msg['status']){
+					$("#missguided").append('<p id="'+msg['pseudo']+'">'+msg['pseudo']+'</p>');
+					$('#numberUsers').text(newNumbUsers+1);
+					
+				}else{
+					$('#'+msg['pseudo']).remove();
+					$('#numberUsers').text(newNumbUsers-1);
+				}
+			});
+			
+			//Envoi de message.
+			function sendMessage(){
+				var msg=$('#msg').val();
+				$('#msg').val('');
+				
+				if (msg.length >= 2){
+					$("#output").scrollTop($("#output")[0].scrollHeight);
+					
+					socket.emit('message', msg);
+				}
+			}
+		</script>
+		<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js" integrity="sha256-KXn5puMvxCw+dAYznun+drMdG1IFl3agK0p/pqT9KAo= sha512-2e8qq0ETcfWRI4HJBzQiA3UoyFk6tbNyG+qSaIBZLyW9Xf3sWZHN/lxe9fTh1U45DpPf07yj94KsUHHWe4Yk1A==" crossorigin="anonymous"></script>
+	</body> 
+</html>

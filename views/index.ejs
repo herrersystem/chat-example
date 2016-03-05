@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8" />
+        <title>Howler</title>
+        
+        <link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.4/themes/smoothness/jquery-ui.css">
+    	<link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" rel="stylesheet" integrity="sha256-7s5uDGW3AHqw6xtJmNNtr+OBRJUlgkNJEo78P4b0yRw= sha512-nNo+yCHEyn0smMxSswnf/OnX6/KwJuZTlNZBjauKhTK0c+zT+q5JOCx0UFhXQ6rJR9jg6Es8gPuD2uZcYDLqSw==" crossorigin="anonymous">
+   
+    </head>
+ 
+    <body>
+		<div class="container">
+			<div class="page-header" style="margin-top:10px;">
+				<center>
+					<img class="img-circle" src="images/hurleur.jpg" width="60" height="60">
+					<h3>Welcome to the world of <span style="color:#4B8F52;">Howler</span> ...</h3>
+				</center>
+			</div>
+			<% if (msgInfo) { %>
+				<div class="alert alert-danger alert-dismissible" role="alert">
+					<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+					<center><%= msgInfo %></center>
+				</div>
+			<% } %>	
+			<br><br>
+			<div class="raw">	
+				<div class="col-md-4 col-md-offset-4 col-xs-8 col-xs-offset-2">
+					<div class="panel panel-default" style="background-color:#f9f9f9;border-color:#ABABAB;">
+						<div class="panel-heading" style="background-color:#829AA8;color:#fff;padding-bottom:15px;"><b>Connection</b></div>
+							<div class="panel-body">
+								<center>
+									<form class="form-inline" action="/channel" method="post">
+										<input name="pseudo" class="form-control" placeholder="Your name ..." style="width:80%;">
+										<br><br>
+										<input name="channel" class="form-control" placeholder="Your channel ..." style="width:80%;">
+										<br>
+										<input class="btn btn-primary" style="margin-top:15px;" type="submit" value="Envoyer">	
+									</form>
+								</center>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
+		<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js" integrity="sha256-KXn5puMvxCw+dAYznun+drMdG1IFl3agK0p/pqT9KAo= sha512-2e8qq0ETcfWRI4HJBzQiA3UoyFk6tbNyG+qSaIBZLyW9Xf3sWZHN/lxe9fTh1U45DpPf07yj94KsUHHWe4Yk1A==" crossorigin="anonymous"></script>
+	</body> 
+</html>

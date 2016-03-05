@@ -1,0 +1,10 @@
+{
+    "name" : "howler",
+    "version" : "0.1.0",
+    "dependencies": {
+        "express" : "~1.0.0",
+	"ejs" : "~2.4.1",
+	"socket.io" : "~1.4.5",
+	"ent" : "~2.2.0"
+    }
+}
