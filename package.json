@@ -1,6 +1,12 @@
 {
     "name" : "howler",
     "version" : "0.1.0",
+    "description" : "chat app example",
+    "licence" : "MIT",
+    "repository" : {
+         "type" : "git",
+         "url" : "https://github.com/herrersystem/chat-example"
+    },
     "dependencies": {
         "express" : "~1.0.0",
 	"ejs" : "~2.4.1",
